@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./SearchBar.module.css";
 import toast from "react-hot-toast";
 
@@ -7,16 +7,19 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSubmit }: SearchBarProps) {
-  const [query, setQuery] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const query = formData.get("query") as string;
+
     if (!query) {
       toast.error("Please enter your search query.");
       return;
     }
+
     onSubmit(query);
-    setQuery("");
+    e.currentTarget.reset();
   };
 
   return (
@@ -35,8 +38,6 @@ export default function SearchBar({ onSubmit }: SearchBarProps) {
             className={styles.input}
             type="text"
             name="query"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
             placeholder="Search movies..."
             autoFocus
