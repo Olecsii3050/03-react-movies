@@ -10,16 +10,20 @@ interface MovieResponse {
 }
 
 export const fetchMovies = async (query: string): Promise<Movie[]> => {
-  const response: AxiosResponse<MovieResponse> = await axios.get(API_URL, {
-    params: {
-      query,
-      include_adult: false,
-      language: "en-US",
-      page: 1,
-    },
-    headers: {
-      Authorization: `Bearer ${TOKEN}`,
-    },
-  });
+  const response: AxiosResponse<MovieResponse> = await axios.get<MovieResponse>(
+    API_URL,
+    {
+      params: {
+        query,
+        include_adult: false,
+        language: "en-US",
+        page: 1,
+      },
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
+    }
+  );
+
   return response.data.results;
 };
